@@ -22,4 +22,5 @@
 
 require File.expand_path('../jenkins_launcher/config_loader', __FILE__)
 require File.expand_path('../jenkins_launcher/api_interface', __FILE__)
+require File.expand_path('../jenkins_launcher/cli', __FILE__)
 require File.expand_path('../jenkins_launcher/version', __FILE__)
