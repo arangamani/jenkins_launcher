@@ -71,7 +71,7 @@ module JenkinsLauncher
         refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
         @api.display_progressive_console_output(params[:name], refresh_rate)
         puts "Build status: #{@api.get_job_status(params[:name])}"
-        @api.delete_job(params[:name])
+        @api.delete_job(params[:name]) if options[:delete_after]
       else
         puts "Build is already running. Run 'attach' command to attach to existing build and watch progress."
       end
@@ -91,6 +91,7 @@ module JenkinsLauncher
 
     desc "attach CONFIG", "Attach to already running build if any"
     method_option :refresh_rate, :aliases => "-r", :desc => "Time to wait between getting console output from server. Default is '5' seconds"
+    method_option :delete_after, :type => :boolean, :aliases => "-d", :desc => "Delete the job from Jenkins after the build is finished"
     def attach(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
@@ -101,7 +102,7 @@ module JenkinsLauncher
         refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
         @api.display_progressive_console_output(params[:name], refresh_rate)
         puts "Build status: #{@api.get_job_status(params[:name])}"
-        @api.delete_job(params[:name])
+        @api.delete_job(params[:name]) if options[:delete_after]
       end
     end
 
