@@ -28,17 +28,18 @@ module JenkinsLauncher
   class ConfigLoader
 
     def load_config(file)
-      puts "[DEBUG] Loading config file: #{file}"
+      puts "Loading configuration from: #{file}"
       loaded_params = YAML.load_file(Dir.pwd + "/#{file}")
       validate_config(loaded_params)
     end
 
     def validate_config(loaded_params)
       valid_params = {}
-      valid_params[:name] = loaded_params[:name]
-      if loaded_params[:shell_command]
+      raise "'name' is required and not set in the yml file." unless loaded_params['name']
+      valid_params[:name] = loaded_params['name']
+      if loaded_params['shell_command']
         valid_params[:shell_command] = ''
-        loaded_params[:shell_command].each do |command|
+        loaded_params['shell_command'].each do |command|
           valid_params[:shell_command] << command + "\n"
         end
       end

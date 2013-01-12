@@ -33,7 +33,6 @@ module JenkinsLauncher
     class_option :server_ip,       :aliases => "-s", :desc => "Jenkins server IP address"
     class_option :server_port,     :aliases => "-o", :desc => "Jenkins server port"
     class_option :creds_file,      :aliases => "-c", :desc => "Credentials file for communicating with Jenkins server"
-    class_option :quiet_period,    :aliases => "-q", :desc => "Jenkins Quit period to wait before getting console output."
 
     map "-v" => :version
 
@@ -59,6 +58,9 @@ module JenkinsLauncher
     end
 
     desc "start CONFIG", "Load configuration, create job on jenkins, and build"
+    method_option :quiet_period, :aliases => "-q", :desc => "Jenkins Quit period to wait before starting to get console output. Default is '5' seconds"
+    method_option :refresh_rate, :aliases => "-r", :desc => "Time to wait between getting console output from server. Default is '5' seconds"
+    method_option :delete_after, :type => :boolean, :aliases => "-d", :desc => "Delete the job from Jenkins after the build is finished"
     def start(config_file)
       params = @config.load_config(config_file)
       @api.create_job(params) unless @api.job_exists?(params[:name])
@@ -66,11 +68,12 @@ module JenkinsLauncher
         @api.build_job(params[:name])
         quiet_period = options[:quiet_period] ? options[:quiet_period] : 5
         sleep quiet_period
-        @api.display_progressive_console_output(params[:name])
+        refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
+        @api.display_progressive_console_output(params[:name], refresh_rate)
         puts "Build status: #{@api.get_job_status(params[:name])}"
         @api.delete_job(params[:name])
       else
-        puts "Build is already running. Run attach command to 'attach' to existing build and watch progress."
+        puts "Build is already running. Run 'attach' command to attach to existing build and watch progress."
       end
     end
 
@@ -80,13 +83,14 @@ module JenkinsLauncher
       if !@api.job_exists?(params[:name])
         puts "The job doesn't exist"
       elsif !@api.job_building?(params[:name])
-        puts "The job is currently not building. It may have finished."
+        puts "The job is currently not building or it may have finished already."
       else
         @api.stop_job(params[:name])
       end
     end
 
     desc "attach CONFIG", "Attach to already running build if any"
+    method_option :refresh_rate, :aliases => "-r", :desc => "Time to wait between getting console output from server. Default is '5' seconds"
     def attach(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
@@ -94,23 +98,27 @@ module JenkinsLauncher
       elsif !@api.job_building?(params[:name])
         puts "Job is not running. Please use the 'start' command to build the job."
       else
-        @api.display_progressive_console_output(params[:name])
+        refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
+        @api.display_progressive_console_output(params[:name], refresh_rate)
         puts "Build status: #{@api.get_job_status(params[:name])}"
         @api.delete_job(params[:name])
       end
     end
 
     desc "destroy CONFIG", "Destroy the job from Jenkins server"
+    method_option :force, :type => :boolean, :aliases => "-f", :desc => "Stop the job if it is already running"
     def destroy(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
         puts "The job doesn't exist or already destroyed."
-      elsif @api.job_building?(params[:name])
+      elsif @api.job_building?(params[:name]) && !options[:force]
         msg = ''
         msg << "The job is currently building. Please use the 'stop' command or wait until the build is completed."
-        msg << " If you would like to watch the progress, use the 'attach' command."
+        msg << " The --force option can be used to stop the build and destroy immediately."
+        msg << "  If you would like to watch the progress, use the 'attach' command."
         puts msg
       else
+        @api.stop_job(params[:name]) if options[:force] && @api.job_building?(params[:name])
         @api.delete_job(params[:name])
       end
     end

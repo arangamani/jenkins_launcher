@@ -67,7 +67,7 @@ module JenkinsLauncher
       @client.job.get_current_build_status(name)
     end
 
-    def display_progressive_console_output(name)
+    def display_progressive_console_output(name, refresh_rate)
       debug_changed = false
       if @client.debug == true
         @client.debug = false
@@ -79,6 +79,7 @@ module JenkinsLauncher
       while response['more']
         size = response['size']
         puts response['output'] unless response['output'].chomp.empty?
+        sleep refresh_rate
         response = @client.job.get_console_output(name, 0, size)
       end
 
