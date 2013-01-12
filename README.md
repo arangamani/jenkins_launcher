@@ -3,7 +3,7 @@ Jenkins Launcher
 
 Overview:
 ---------
-Jenkins launcher makes use of the  'jenkins_api_client' Rubygem which is an API client/wrapper written in pure Ruby and makes use of the Jenkins's JSON API. This project mainly focusses on performing continuous integration tests on a remote Jenkins CI server and all activities are achieved through a command line interface. This projects acts much like building on Travis CI, but makes use of your organization's own Jenkins server where you may have specialized configuration or you don't want to expose your results publicly.
+Jenkins launcher makes use of the  [jenkins_api_client](https://github.com/arangamani/jenkins_api_client) Rubygem which is an API client/wrapper written in pure Ruby and makes use of the Jenkins's JSON API. This project mainly focusses on performing continuous integration tests on a remote Jenkins CI server and all activities are achieved through a command line interface. This projects acts much like building on Travis CI, but makes use of your organization's own Jenkins server where you may have specialized configuration or you don't want to expose your results publicly.
 
 Installation:
 -------------
