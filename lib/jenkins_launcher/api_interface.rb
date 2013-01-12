@@ -20,6 +20,10 @@
 # THE SOFTWARE.
 #
 
-require File.expand_path('../jenkins_launcher/config_loader', __FILE__)
-require File.expand_path('../jenkins_launcher/api_interface', __FILE__)
-require File.expand_path('../jenkins_launcher/version', __FILE__)
+require 'jenkins_api_client'
+
+module JenkinsLauncher
+  class APIInterface
+
+  end
+end
