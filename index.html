@@ -1,62 +1,250 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Jenkins Launcher by arangamani</title>
+  </head>
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>Jenkins Launcher</title>
-  <meta name="description" content="Launching jobs on Jenkins and Building all through command line and a simple YAML configuration file">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-</head>
-
-<body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Jenkins Launcher</h1>
-    </header>
+  <body>
     <div id="container">
-      <p class="tagline">Launching jobs on Jenkins and Building all through command line and a simple YAML configuration file</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/arangamani/jenkins_launcher/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/arangamani/jenkins_launcher/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/arangamani/jenkins_launcher" class="code">View Jenkins Launcher on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <h1>jenkins_launcher</h1>
-        </article>
+      <div class="inner">
+
+        <header>
+          <h1>Jenkins Launcher</h1>
+          <h2>Command line interface for performing continuous integration on Jenkins CI with Travis CI like configuration management</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/arangamani/jenkins_launcher/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/arangamani/jenkins_launcher/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/arangamani/jenkins_launcher" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>Jenkins Launcher</h1>
+
+<h2>Overview:</h2>
+
+<p>Jenkins launcher makes use of the  'jenkins_api_client' Rubygem which is an API client/wrapper written in pure Ruby and makes use of the Jenkins's JSON API. This project mainly focusses on performing continuous integration tests on a remote Jenkins CI server and all activities are achieved through a command line interface. This projects acts much like building on Travis CI, but makes use of your organization's own Jenkins server where you may have specialized configuration or you don't want to expose your results publicly.</p>
+
+<h2>Installation:</h2>
+
+<pre><code>gem install jenkins_launcher
+</code></pre>
+
+<h2>Getting Started:</h2>
+
+<h3>Command line interface:</h3>
+
+<p>This Rubygem installs a command <code>jlaunch</code> when this gem gets installed.</p>
+
+<p>Simply running the command on your terminal will show all available commands and options available.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch 
+Tasks:
+  jlaunch attach CONFIG   # Attach to already running build if any
+  jlaunch create CONFIG   # Load configuration and create a job on jenkins
+  jlaunch destroy CONFIG  # Destroy the job from Jenkins server
+  jlaunch help [TASK]     # Describe available tasks or one specific task
+  jlaunch start CONFIG    # Load configuration, create job on jenkins, and build
+  jlaunch stop CONFIG     # Stop already running build of the job
+  jlaunch version         # Shows current version
+
+Options:
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+</code></pre>
+
+<h4>Create command:</h4>
+
+<p>The <code>create</code> command loads the configuration from your configuration file and creates the job on the Jenkins server if it is not already created. Pleas use some unique name for the job. Typing <code>jlaunch help create</code> will show the help page for the create command.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help create
+Usage:
+  jlaunch create CONFIG
+
+Options:
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Load configuration and create a job on jenkins
+</code></pre>
+
+<h4>Start command:</h4>
+
+<p>The <code>start</code> command will create the job if it is not already there and also start a build of the job. Typing <code>jlaunch help start</code> will show the help page for this command.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help start
+Usage:
+  jlaunch start CONFIG
+
+Options:
+  -q, [--quiet-period=QUIET_PERIOD]        # Jenkins Quit period to wait before starting to get console output. Default is '5' seconds
+  -r, [--refresh-rate=REFRESH_RATE]        # Time to wait between getting console output from server. Default is '5' seconds
+  -d, [--delete-after]                     # Delete the job from Jenkins after the build is finished
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Load configuration, create job on jenkins, and build
+</code></pre>
+
+<p>The start command accepts three other options:</p>
+
+<ol>
+<li>
+<code>--quiet-period</code>: This is the quiet period of the jenkins server to wait after the build is scheduled. The default is <code>5</code> seconds. This command will wait for the specified seconds to get the console output after the build is scheduled.</li>
+<li>
+<code>--refresh-rate</code>: This is the rate for pinging the Jenkins API to get the console output. The default for this is set to <code>5</code> seconds. This is the default in the Jenkins UI as well.</li>
+<li>
+<code>--delete-after</code>: If this boolean option is specified in the command, the job will be deleted from the Jenkins server after the build is finished. If for some reason the command line is interrupted, the job will not be deleted. The <code>attach</code> command should be run to attach to the running job. If the job is already finished and should be deleted, use the <code>destroy</code> command separately to delete the job.</li>
+</ol><h4>Attach command:</h4>
+
+<p>The <code>attach</code> command is used for attaching to an already running build and to watch it's progress. Typing <code>jlaunch help attach</code> will show the help page for this command.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help attach
+Usage:
+  jlaunch attach CONFIG
+
+Options:
+  -r, [--refresh-rate=REFRESH_RATE]        # Time to wait between getting console output from server. Default is '5' seconds
+  -d, [--delete-after]                     # Delete the job from Jenkins after the build is finished
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Attach to already running build if any
+</code></pre>
+
+<p>This command also accepts the <code>--refresh-rate</code> and <code>--delete-after</code> options. See the <code>start</code> command for more details on this option.</p>
+
+<h4>Stop command:</h4>
+
+<p>The <code>stop</code> command stops running build of a job. Typing <code>jlaunch help stop</code> will show the help page for this command.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help stop
+Usage:
+  jlaunch stop CONFIG
+
+Options:
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Stop already running build of the job
+</code></pre>
+
+<h4>Destroy command:</h4>
+
+<p>The <code>destroy</code> command will destroy the job created on the Jenkins server. This is usually used after all tests are ran and the job is not required anymore. Typing <code>jlaunch help destroy</code> will bring up the following help page.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help destroy
+Usage:
+  jlaunch destroy CONFIG
+
+Options:
+  -f, [--force]                            # Stop the job if it is already running
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Destroy the job from Jenkins server
+</code></pre>
+
+<p>This command accepts a boolean option <code>--force</code> which forces the destroy command to stop any running build. If this option is not specified the command will exit without destroying the job or the <code>stop</code> command can be called separately to stop the build before calling this command.</p>
+
+<h3>Structure of the configuration YAML file:</h3>
+
+<p>The structure of the configuration file looks like this.</p>
+
+<pre><code>:name: test_build_kannan
+:shell_command:
+ - echo "first echo"
+ - sleep 10
+ - echo "second echo"
+ - sleep 5
+</code></pre>
+
+<h4>Configuration options:</h4>
+
+<ul>
+<li>name: Name is a required parameter and used for creating job on the Jenkins server.</li>
+<li>shell_command: Shell command is the command executed on the server. Multiple lines of command can be given just like shown in the example.</li>
+</ul><h2>Author:</h2>
+
+<p>Kannan Manickam <a href="mailto:arangamani.kannan@gmail.com">arangamani.kannan@gmail.com</a></p>
+
+<h2>CONTRIBUTING:</h2>
+
+<p>If you would like to contribute to this project, just do the following:</p>
+
+<ol>
+<li>Fork the repo on Github.</li>
+<li>Add your features and make commits to your forked repo.</li>
+<li>Make a pull request to this repo.</li>
+<li>Review will be done and changes will be requested.</li>
+<li>Once changes are done or no changes are required, pull request will be merged.</li>
+<li>The next release will have your changes in it.</li>
+</ol><h2>LICENCE:</h2>
+
+<p>Copyright (c) 2013 Kannan Manickam <a href="mailto:arangamani.kannan@gmail.com">arangamani.kannan@gmail.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+        </section>
+
+        <footer>
+          Jenkins Launcher is maintained by <a href="https://github.com/arangamani">arangamani</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
       </div>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/arangamani" class="avatar"><img src="https://secure.gravatar.com/avatar/6ff021800637b88cbe17d1330cbcc1a5?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/arangamani">arangamani</a> maintains <a href="https://github.com/arangamani/jenkins_launcher">Jenkins Launcher</a></p>
-
-
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/arangamani/jenkins_launcher/tarball/master" class="tar">tar</a><a href="https://github.com/arangamani/jenkins_launcher/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-  
-</body>
+  </body>
 </html>
