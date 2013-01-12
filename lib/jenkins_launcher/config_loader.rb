@@ -29,7 +29,7 @@ module JenkinsLauncher
 
     def load_config(file)
       puts "[DEBUG] Loading config file: #{file}"
-      loaded_params = YAML.load_file(File.expand_path(file, __FILE__))
+      loaded_params = YAML.load_file(Dir.pwd + "/#{file}")
       validate_config(loaded_params)
     end
 
