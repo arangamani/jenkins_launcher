@@ -40,15 +40,23 @@ module JenkinsLauncher
     end
 
     def create_job(params)
-      @client.job.create_freestyle(params)
+      @client.job.create_freestyle(params) unless @client.job.exists?(params[:name])
     end
 
     def build_job(name)
-      @client.job.build(name)
+      @client.job.build(name) unless @client.job.get_current_build_status(name) == 'running'
     end
 
-    def abort_job(name)
+    def stop_job(name)
+      @client.job.stop_build(name)
+    end
 
+    def job_exists?(name)
+      @client.job.exists?(name)
+    end
+
+    def job_building?(name)
+      @client.job.get_current_build_status(name) == 'running'
     end
 
     def delete_job(name)

@@ -48,27 +48,71 @@ module JenkinsLauncher
       puts JenkinsLauncher::VERSION
     end
 
+    desc "create CONFIG", "Load configuration and create a job on jenkins"
+    def create(config_file)
+      params = @config.load_config(config_file)
+      unless @api.job_exists?(params[:name])
+        @api.create_job(params)
+      else
+        puts "The job is already created. Please use 'start' command to build the job."
+      end
+    end
+
     desc "start CONFIG", "Load configuration, create job on jenkins, and build"
     def start(config_file)
-      puts @global
       params = @config.load_config(config_file)
-      @api.create_job(params)
-      @api.build_job(params[:name])
-      quiet_period = options[:quiet_period] ? options[:quiet_period] : 5
-      sleep quiet_period
-      @api.display_progressive_console_output(params[:name])
-      puts "Build status: #{@api.get_job_status(params[:name])}"
-      @api.delete_job(params[:name])
+      @api.create_job(params) unless @api.job_exists?(params[:name])
+      unless @api.job_building?(params[:name])
+        @api.build_job(params[:name])
+        quiet_period = options[:quiet_period] ? options[:quiet_period] : 5
+        sleep quiet_period
+        @api.display_progressive_console_output(params[:name])
+        puts "Build status: #{@api.get_job_status(params[:name])}"
+        @api.delete_job(params[:name])
+      else
+        puts "Build is already running. Run attach command to 'attach' to existing build and watch progress."
+      end
+    end
+
+    desc "stop CONFIG", "Stop already running build of the job"
+    def stop(config_file)
+      params = @config.load_config(config_file)
+      if !@api.job_exists?(params[:name])
+        puts "The job doesn't exist"
+      elsif !@api.job_building?(params[:name])
+        puts "The job is currently not building. It may have finished."
+      else
+        @api.stop_job(params[:name])
+      end
     end
 
     desc "attach CONFIG", "Attach to already running build if any"
     def attach(config_file)
-
+      params = @config.load_config(config_file)
+      if !@api.job_exists?(params[:name])
+        puts "Job is not created. Please use the 'start' command to create and build the job."
+      elsif !@api.job_building?(params[:name])
+        puts "Job is not running. Please use the 'start' command to build the job."
+      else
+        @api.display_progressive_console_output(params[:name])
+        puts "Build status: #{@api.get_job_status(params[:name])}"
+        @api.delete_job(params[:name])
+      end
     end
 
     desc "destroy CONFIG", "Destroy the job from Jenkins server"
     def destroy(config_file)
-
+      params = @config.load_config(config_file)
+      if !@api.job_exists?(params[:name])
+        puts "The job doesn't exist or already destroyed."
+      elsif @api.job_building?(params[:name])
+        msg = ''
+        msg << "The job is currently building. Please use the 'stop' command or wait until the build is completed."
+        msg << " If you would like to watch the progress, use the 'attach' command."
+        puts msg
+      else
+        @api.delete_job(params[:name])
+      end
     end
 
   end
