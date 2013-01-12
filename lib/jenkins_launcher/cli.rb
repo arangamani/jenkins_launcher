@@ -33,12 +33,42 @@ module JenkinsLauncher
     class_option :server_ip,       :aliases => "-s", :desc => "Jenkins server IP address"
     class_option :server_port,     :aliases => "-o", :desc => "Jenkins server port"
     class_option :creds_file,      :aliases => "-c", :desc => "Credentials file for communicating with Jenkins server"
+    class_option :quiet_period,    :aliases => "-q", :desc => "Jenkins Quit period to wait before getting console output."
 
     map "-v" => :version
+
+    def initialize(arg1, arg2, arg3)
+      super
+      @api = APIInterface.new(options)
+      @config = ConfigLoader.new
+    end
 
     desc "version", "Shows current version"
     def version
       puts JenkinsLauncher::VERSION
+    end
+
+    desc "start CONFIG", "Load configuration, create job on jenkins, and build"
+    def start(config_file)
+      puts @global
+      params = @config.load_config(config_file)
+      @api.create_job(params)
+      @api.build_job(params[:name])
+      quiet_period = options[:quiet_period] ? options[:quiet_period] : 5
+      sleep quiet_period
+      @api.display_progressive_console_output(params[:name])
+      puts "Build status: #{@api.get_job_status(params[:name])}"
+      @api.delete_job(params[:name])
+    end
+
+    desc "attach CONFIG", "Attach to already running build if any"
+    def attach(config_file)
+
+    end
+
+    desc "destroy CONFIG", "Destroy the job from Jenkins server"
+    def destroy(config_file)
+
     end
 
   end

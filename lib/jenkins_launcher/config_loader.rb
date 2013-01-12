@@ -22,9 +22,28 @@
 
 require 'rubygems'
 require 'json'
+require 'fileutils'
 
 module JenkinsLauncher
   class ConfigLoader
+
+    def load_config(file)
+      puts "[DEBUG] Loading config file: #{file}"
+      loaded_params = YAML.load_file(File.expand_path(file, __FILE__))
+      validate_config(loaded_params)
+    end
+
+    def validate_config(loaded_params)
+      valid_params = {}
+      valid_params[:name] = loaded_params[:name]
+      if loaded_params[:shell_command]
+        valid_params[:shell_command] = ''
+        loaded_params[:shell_command].each do |command|
+          valid_params[:shell_command] << command + "\n"
+        end
+      end
+      valid_params
+    end
 
   end
 end

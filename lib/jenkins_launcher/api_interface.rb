@@ -25,5 +25,57 @@ require 'jenkins_api_client'
 module JenkinsLauncher
   class APIInterface
 
+    def initialize(options)
+      if options[:username] && options[:server_ip] && (options[:password] || options[:password_base64])
+        creds = options
+      elsif options[:creds_file]
+        creds = YAML.load_file(File.expand_path(options[:creds_file], __FILE__))
+      elsif File.exist?("#{ENV['HOME']}/.jenkins_api_client/login.yml")
+        creds = YAML.load_file(File.expand_path("#{ENV['HOME']}/.jenkins_api_client/login.yml", __FILE__))
+      else
+        puts "Credentials are not set. Please pass them as parameters or set them in the default credentials file"
+        exit 1
+      end
+      @client = JenkinsApi::Client.new(creds)
+    end
+
+    def create_job(params)
+      @client.job.create_freestyle(params)
+    end
+
+    def build_job(name)
+      @client.job.build(name)
+    end
+
+    def abort_job(name)
+
+    end
+
+    def delete_job(name)
+      @client.job.delete(name)
+    end
+
+    def get_job_status(name)
+      @client.job.get_current_build_status(name)
+    end
+
+    def display_progressive_console_output(name)
+      debug_changed = false
+      if @client.debug == true
+        @client.debug = false
+        debug_changed = true
+      end
+
+      response = @client.job.get_console_output(name)
+      puts response['output'] unless response['more']
+      while response['more']
+        size = response['size']
+        puts response['output'] unless response['output'].chomp.empty?
+        response = @client.job.get_console_output(name, 0, size)
+      end
+
+      @client.toggle_debug if debug_changed
+    end
+
   end
 end
