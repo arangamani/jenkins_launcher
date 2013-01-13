@@ -146,6 +146,25 @@ Attach to already running build if any
 
 <p>This command also accepts the <code>--refresh-rate</code> and <code>--delete-after</code> options. See the <code>start</code> command for more details on this option.</p>
 
+<h4>Console command:</h4>
+
+<p>The <code>console</code> command just prints the console output from the most recent build of the job. Typing <code>jlaunch help console</code> will bring up the following help page.</p>
+
+<pre><code>Kannans-MacBook-Pro:~ kannanmanickam$ jlaunch help console
+Usage:
+  jlaunch console CONFIG
+
+Options:
+  -u, [--username=USERNAME]                # Name of Jenkins user
+  -p, [--password=PASSWORD]                # Password of Jenkins user
+  -b, [--password-base64=PASSWORD_BASE64]  # Base 64 encoded password of Jenkins user
+  -s, [--server-ip=SERVER_IP]              # Jenkins server IP address
+  -o, [--server-port=SERVER_PORT]          # Jenkins server port
+  -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
+
+Show the console output of the recent build if any
+</code></pre>
+
 <h4>Stop command:</h4>
 
 <p>The <code>stop</code> command stops running build of a job. Typing <code>jlaunch help stop</code> will show the help page for this command.</p>
