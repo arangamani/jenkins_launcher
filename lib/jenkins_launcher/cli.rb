@@ -47,13 +47,13 @@ module JenkinsLauncher
       def print_status(status)
         case status
         when "success"
-          puts "Build status: #{status}".green
+          puts "Build status: #{status.upcase}".green
         when "failure"
-          puts "Build status: #{status}".red
+          puts "Build status: #{status.upcase}".red
         when "unstable"
-          puts "Build status: #{status}".yellow
+          puts "Build status: #{status.upcase}".yellow
         else
-          puts "Build status: #{status}"
+          puts "Build status: #{status.upcase}"
         end
       end
     end
@@ -119,6 +119,18 @@ module JenkinsLauncher
         @api.display_progressive_console_output(params[:name], refresh_rate)
         print_status(@api.get_job_status(params[:name]))
         @api.delete_job(params[:name]) if options[:delete_after]
+      end
+    end
+
+    desc "console CONFIG", "Show the console output of the recent build if any"
+    def console(config_file)
+      params = @config.load_config(config_file)
+      if !@api.job_exists?(params[:name])
+        puts "Job is not created. Please use the 'create' or 'start' command to create or/and build the job.".red
+      elsif @api.job_building?(params[:name])
+        puts "The job is currently building. Please use the 'attach' command to attach to the running build and watch progress".yellow
+      else
+        @api.display_progressive_console_output(params[:name], 5)
       end
     end
 
