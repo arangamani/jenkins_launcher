@@ -82,7 +82,8 @@ module JenkinsLauncher
         sleep refresh_rate
         response = @client.job.get_console_output(name, 0, size)
       end
-
+      # Print the last few lines
+      puts response['output'] unless response['output'].chomp.empty?
       @client.toggle_debug if debug_changed
     end
 
