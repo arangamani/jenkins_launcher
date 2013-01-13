@@ -20,8 +20,10 @@
 # THE SOFTWARE.
 #
 
-require File.expand_path('../jenkins_launcher/config_loader', __FILE__)
-require File.expand_path('../jenkins_launcher/api_interface', __FILE__)
-require File.expand_path('../jenkins_launcher/cli', __FILE__)
-require File.expand_path('../jenkins_launcher/version', __FILE__)
-require File.expand_path('../jenkins_launcher/core_ext', __FILE__)
+class String
+  colors = %w[black red green yellow blue magenta cyan white]
+  colors.concat colors.map { |c| "light#{c}" }
+  colors.each_with_index do |color, i|
+    define_method(color) { "\e[38;5;#{i}m#{self}\e[0m" }
+  end
+end

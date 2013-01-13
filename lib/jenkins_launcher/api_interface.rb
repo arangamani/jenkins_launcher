@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #
 
+require File.expand_path('../core_ext', __FILE__)
 require 'jenkins_api_client'
 
 module JenkinsLauncher

@@ -22,6 +22,7 @@
 
 require File.expand_path('../config_loader', __FILE__)
 require File.expand_path('../api_interface', __FILE__)
+require File.expand_path('../core_ext', __FILE__)
 require 'thor'
 
 module JenkinsLauncher
@@ -53,7 +54,7 @@ module JenkinsLauncher
       unless @api.job_exists?(params[:name])
         @api.create_job(params)
       else
-        puts "The job is already created. Please use 'start' command to build the job."
+        puts "The job is already created. Please use 'start' command to build the job.".yellow
       end
     end
 
