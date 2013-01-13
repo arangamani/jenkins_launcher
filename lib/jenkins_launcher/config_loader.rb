@@ -35,8 +35,22 @@ module JenkinsLauncher
 
     def validate_config(loaded_params)
       valid_params = {}
+      # Name
       raise "'name' is required and not set in the yml file." unless loaded_params['name']
       valid_params[:name] = loaded_params['name']
+
+      # Source control
+      # Git, Subversion
+      if loaded_params['git']
+        valid_params[:scm_provider] = 'git'
+        valid_params[:scm_url] = loaded_params['git']
+        valid_params[:scm_branch] = loaded_params['ref'] ? loaded_params['ref'] : 'master'
+      elsif loaded_params['svn']
+        valid_params[:scm_provider] = 'subversion'
+        valid_params[:scm_url] = loaded_params['svn']
+      end
+
+      # Shell command
       if loaded_params['shell_command']
         valid_params[:shell_command] = ''
         loaded_params['shell_command'].each do |command|
