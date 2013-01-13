@@ -53,7 +53,7 @@ module JenkinsLauncher
       # Shell command
       if loaded_params['script']
         valid_params[:shell_command] = ''
-        loaded_params['shell_command'].each do |command|
+        loaded_params['script'].each do |command|
           valid_params[:shell_command] << command + "\n"
         end
       end
