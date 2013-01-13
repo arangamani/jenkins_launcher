@@ -1,0 +1,7 @@
+name: test_build_kannan_jenkins_api_client
+git: git://github.com/arangamani/jenkins_api_client.git
+ref: master
+script:
+ - sleep 5
+ - bundle install
+ - rake build
