@@ -192,7 +192,9 @@ Destroy the job from Jenkins server
 <p>The structure of the configuration file looks like this.</p>
 
 <pre><code>name: test_build_kannan
-shell_command:
+git: git://github.com/arangamani/jenkins_api_client.git
+ref: master
+script:
  - echo "first echo"
  - sleep 10
  - echo "second echo"
@@ -203,7 +205,10 @@ shell_command:
 
 <ul>
 <li>name: Name is a required parameter and used for creating job on the Jenkins server.</li>
-<li>shell_command: Shell command is the command executed on the server. Multiple lines of command can be given just like shown in the example.</li>
+<li>git: Git URL for checking out the project from. This requires that you need Git plugin installed on your Jenkins. If not, the job will be created without this source control.</li>
+<li>svn: Subversion URL. If this option is specified, the Subversion URL will be used to checkout the project. Subversion is installed in Jenkins by default.</li>
+<li>ref: This specifies the <code>branch</code> to checkout for Git source control system.</li>
+<li>script: Shell command is the command executed on the server. Multiple lines of command can be given just like shown in the example.</li>
 </ul><h2>Author:</h2>
 
 <p>Kannan Manickam <a href="mailto:arangamani.kannan@gmail.com">arangamani.kannan@gmail.com</a></p>
