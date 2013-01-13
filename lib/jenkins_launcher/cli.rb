@@ -43,6 +43,21 @@ module JenkinsLauncher
       @config = ConfigLoader.new
     end
 
+    no_tasks do
+      def print_status(status)
+        case status
+        when "success"
+          puts "Build status: #{status}".green
+        when "failure"
+          puts "Build status: #{status}".red
+        when "unstable"
+          puts "Build status: #{status}".yellow
+        else
+          puts "Build status: #{status}"
+        end
+      end
+    end
+
     desc "version", "Shows current version"
     def version
       puts JenkinsLauncher::VERSION
@@ -71,10 +86,10 @@ module JenkinsLauncher
         sleep quiet_period
         refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
         @api.display_progressive_console_output(params[:name], refresh_rate)
-        puts "Build status: #{@api.get_job_status(params[:name])}"
+        print_status(@api.get_job_status(params[:name]))
         @api.delete_job(params[:name]) if options[:delete_after]
       else
-        puts "Build is already running. Run 'attach' command to attach to existing build and watch progress."
+        puts "Build is already running. Run 'attach' command to attach to existing build and watch progress.".yellow
       end
     end
 
@@ -82,9 +97,9 @@ module JenkinsLauncher
     def stop(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
-        puts "The job doesn't exist"
+        puts "The job doesn't exist".red
       elsif !@api.job_building?(params[:name])
-        puts "The job is currently not building or it may have finished already."
+        puts "The job is currently not building or it may have finished already.".yellow
       else
         @api.stop_job(params[:name])
       end
@@ -96,13 +111,13 @@ module JenkinsLauncher
     def attach(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
-        puts "Job is not created. Please use the 'start' command to create and build the job."
+        puts "Job is not created. Please use the 'start' command to create and build the job.".red
       elsif !@api.job_building?(params[:name])
-        puts "Job is not running. Please use the 'start' command to build the job."
+        puts "Job is not running. Please use the 'start' command to build the job.".yellow
       else
         refresh_rate = options[:refresh_rate] ? options[:refresh_rate].to_i : 5
         @api.display_progressive_console_output(params[:name], refresh_rate)
-        puts "Build status: #{@api.get_job_status(params[:name])}"
+        print_status(@api.get_job_status(params[:name]))
         @api.delete_job(params[:name]) if options[:delete_after]
       end
     end
@@ -112,13 +127,13 @@ module JenkinsLauncher
     def destroy(config_file)
       params = @config.load_config(config_file)
       if !@api.job_exists?(params[:name])
-        puts "The job doesn't exist or already destroyed."
+        puts "The job doesn't exist or already destroyed.".yellow
       elsif @api.job_building?(params[:name]) && !options[:force]
         msg = ''
         msg << "The job is currently building. Please use the 'stop' command or wait until the build is completed."
         msg << " The --force option can be used to stop the build and destroy immediately."
         msg << "  If you would like to watch the progress, use the 'attach' command."
-        puts msg
+        puts msg.yellow
       else
         @api.stop_job(params[:name]) if options[:force] && @api.job_building?(params[:name])
         @api.delete_job(params[:name])
