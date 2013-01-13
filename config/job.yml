@@ -1,0 +1,8 @@
+name: test_build_kannan_api
+shell_command:
+ - cat /dev/null > ~/.ssh/known_hosts
+ - cd /root/virtualmonkey/
+ - cat collateral/servertemplate_tests/updatedTroops/base_chef.json
+ - bin/monkey create -f collateral/servertemplate_tests/updatedTroops/base_chef.json -x WQA1209_AWS_ORG_Cen63_002_base_chef -i 6 -o RightImage_CentOS_6.3_x64_v5.8$  --yes
+ - bin/monkey run -f collateral/servertemplate_tests/updatedTroops/base_chef.json -x WQA1209_AWS_ORG_Cen63_002_base_chef  -r -u "booting_timeout=3600" "completed_timeout=3600" "default_timeout=3600" "error_timeout=3600" "failed_timeout=3600" "inactive_timeout=3600" "operational_timeout=3600" "snapshot_timeout=3600" "stopped_timeout=3600" "terminated_timeout=3600" -v --yes
+

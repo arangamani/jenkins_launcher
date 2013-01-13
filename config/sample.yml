@@ -1,5 +1,5 @@
-:name: test_build_kannan
-:shell_command:
+name: test_build_kannan
+shell_command:
  - echo "first echo"
  - sleep 10
  - echo "second echo"
