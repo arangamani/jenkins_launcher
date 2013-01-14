@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+v0.1.1  [14-JAN-2013]
+---------------------
+* Added option to specify which node the Job should run.
+* Minor usability tweaks to print success messages if operation completed successfully.
+
 v0.1.0  [13-JAN-2013]
 ---------------------
 * Added options for source control management: Git and Subversion.
