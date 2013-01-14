@@ -1,5 +1,6 @@
 name: test_build_kannan
-shell_command:
+node: slave
+script:
  - echo "first echo"
  - sleep 10
  - echo "second echo"

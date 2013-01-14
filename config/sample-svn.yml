@@ -1,7 +1,7 @@
 name: test_build_kannan_svn
 svn: https://src.chromium.org/chrome/trunk/src/chrome/common/extensions/docs/examples/tutorials/getstarted/
 ref: master
-shell_command:
+script:
  - echo "first echo"
  - sleep 10
  - echo "second echo"
