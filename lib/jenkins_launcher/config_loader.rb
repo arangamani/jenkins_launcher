@@ -39,6 +39,9 @@ module JenkinsLauncher
       raise "'name' is required and not set in the yml file." unless loaded_params['name']
       valid_params[:name] = loaded_params['name']
 
+      # Node to restrict the job to
+      valid_params[:node] = loaded_params['node'] if loaded_params['node']
+
       # Source control
       # Git, Subversion
       if loaded_params['git']

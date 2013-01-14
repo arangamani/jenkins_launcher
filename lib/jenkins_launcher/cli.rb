@@ -68,6 +68,8 @@ module JenkinsLauncher
       params = @config.load_config(config_file)
       unless @api.job_exists?(params[:name])
         @api.create_job(params)
+        @api.use_node(params[:name], params[:node]) if params[:node]
+        puts "The Job '#{params[:name]}' is created successfully.".green
       else
         puts "The job is already created. Please use 'start' command to build the job.".yellow
       end
@@ -79,7 +81,10 @@ module JenkinsLauncher
     method_option :delete_after, :type => :boolean, :aliases => "-d", :desc => "Delete the job from Jenkins after the build is finished"
     def start(config_file)
       params = @config.load_config(config_file)
-      @api.create_job(params) unless @api.job_exists?(params[:name])
+      unless @api.job_exists?(params[:name])
+        @api.create_job(params)
+        @api.use_node(params[:name], params[:node]) if params[:node]
+      end
       unless @api.job_building?(params[:name])
         @api.build_job(params[:name])
         quiet_period = options[:quiet_period] ? options[:quiet_period] : 5
@@ -149,6 +154,7 @@ module JenkinsLauncher
       else
         @api.stop_job(params[:name]) if options[:force] && @api.job_building?(params[:name])
         @api.delete_job(params[:name])
+        puts "The job '#{params[:name]}' is destroyed successfully.".green
       end
     end
 

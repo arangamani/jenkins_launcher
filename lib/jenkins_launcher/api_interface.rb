@@ -88,5 +88,13 @@ module JenkinsLauncher
       @client.toggle_debug if debug_changed
     end
 
+    def use_node(job_name, node_name)
+      if @client.node.list.include?(node_name)
+        @client.job.restrict_to_node(job_name, node_name)
+      else
+        puts "Node '#{node_name}' is not found on Jenkins server. Skipping...".yellow
+      end
+    end
+
   end
 end
