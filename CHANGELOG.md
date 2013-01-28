@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+v0.1.2  [28-JAN-2013]
+---------------------
+* Updated jenkins_api_client to ~0.7.0
+
 v0.1.1  [14-JAN-2013]
 ---------------------
 * Added option to specify which node the Job should run.
