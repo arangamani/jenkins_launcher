@@ -31,24 +31,30 @@
         <hr>
 
         <section id="main_content">
-          <h1>Jenkins Launcher</h1>
+          <h1>
+<a name="jenkins-launcher" class="anchor" href="#jenkins-launcher"><span class="octicon octicon-link"></span></a>Jenkins Launcher</h1>
 
-<h2>Overview:</h2>
+<h2>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview:</h2>
 
 <p>Jenkins launcher makes use of the  'jenkins_api_client' Rubygem which is an API client/wrapper written in pure Ruby and makes use of the Jenkins's JSON API. This project mainly focusses on performing continuous integration tests on a remote Jenkins CI server and all activities are achieved through a command line interface. This projects acts much like building on Travis CI, but makes use of your organization's own Jenkins server where you may have specialized configuration or you don't want to expose your results publicly.</p>
 
-<h2>Installation:</h2>
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation:</h2>
 
 <pre><code>gem install jenkins_launcher
 </code></pre>
 
-<h2>Getting Started:</h2>
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started:</h2>
 
-<h3>Jenkins credentials:</h3>
+<h3>
+<a name="jenkins-credentials" class="anchor" href="#jenkins-credentials"><span class="octicon octicon-link"></span></a>Jenkins credentials:</h3>
 
 <p>Please checkout the <a href="https://github.com/arangamani/jenkins_api_client/blob/master/README.md#authentication">README.md</a> of the Jenkins API client project for setting up credentials for easy access.</p>
 
-<h3>Command line interface:</h3>
+<h3>
+<a name="command-line-interface" class="anchor" href="#command-line-interface"><span class="octicon octicon-link"></span></a>Command line interface:</h3>
 
 <p>This Rubygem installs a command <code>jlaunch</code> when this gem gets installed.</p>
 
@@ -73,7 +79,8 @@ Options:
   -c, [--creds-file=CREDS_FILE]            # Credentials file for communicating with Jenkins server
 </code></pre>
 
-<h4>Create command:</h4>
+<h4>
+<a name="create-command" class="anchor" href="#create-command"><span class="octicon octicon-link"></span></a>Create command:</h4>
 
 <p>The <code>create</code> command loads the configuration from your configuration file and creates the job on the Jenkins server if it is not already created. Pleas use some unique name for the job. Typing <code>jlaunch help create</code> will show the help page for the create command.</p>
 
@@ -92,7 +99,8 @@ Options:
 Load configuration and create a job on jenkins
 </code></pre>
 
-<h4>Start command:</h4>
+<h4>
+<a name="start-command" class="anchor" href="#start-command"><span class="octicon octicon-link"></span></a>Start command:</h4>
 
 <p>The <code>start</code> command will create the job if it is not already there and also start a build of the job. Typing <code>jlaunch help start</code> will show the help page for this command.</p>
 
@@ -123,7 +131,8 @@ Load configuration, create job on jenkins, and build
 <code>--refresh-rate</code>: This is the rate for pinging the Jenkins API to get the console output. The default for this is set to <code>5</code> seconds. This is the default in the Jenkins UI as well.</li>
 <li>
 <code>--delete-after</code>: If this boolean option is specified in the command, the job will be deleted from the Jenkins server after the build is finished. If for some reason the command line is interrupted, the job will not be deleted. The <code>attach</code> command should be run to attach to the running job. If the job is already finished and should be deleted, use the <code>destroy</code> command separately to delete the job.</li>
-</ol><h4>Attach command:</h4>
+</ol><h4>
+<a name="attach-command" class="anchor" href="#attach-command"><span class="octicon octicon-link"></span></a>Attach command:</h4>
 
 <p>The <code>attach</code> command is used for attaching to an already running build and to watch it's progress. Typing <code>jlaunch help attach</code> will show the help page for this command.</p>
 
@@ -146,7 +155,8 @@ Attach to already running build if any
 
 <p>This command also accepts the <code>--refresh-rate</code> and <code>--delete-after</code> options. See the <code>start</code> command for more details on this option.</p>
 
-<h4>Console command:</h4>
+<h4>
+<a name="console-command" class="anchor" href="#console-command"><span class="octicon octicon-link"></span></a>Console command:</h4>
 
 <p>The <code>console</code> command just prints the console output from the most recent build of the job. Typing <code>jlaunch help console</code> will bring up the following help page.</p>
 
@@ -165,7 +175,8 @@ Options:
 Show the console output of the recent build if any
 </code></pre>
 
-<h4>Stop command:</h4>
+<h4>
+<a name="stop-command" class="anchor" href="#stop-command"><span class="octicon octicon-link"></span></a>Stop command:</h4>
 
 <p>The <code>stop</code> command stops running build of a job. Typing <code>jlaunch help stop</code> will show the help page for this command.</p>
 
@@ -184,7 +195,8 @@ Options:
 Stop already running build of the job
 </code></pre>
 
-<h4>Destroy command:</h4>
+<h4>
+<a name="destroy-command" class="anchor" href="#destroy-command"><span class="octicon octicon-link"></span></a>Destroy command:</h4>
 
 <p>The <code>destroy</code> command will destroy the job created on the Jenkins server. This is usually used after all tests are ran and the job is not required anymore. Typing <code>jlaunch help destroy</code> will bring up the following help page.</p>
 
@@ -206,7 +218,8 @@ Destroy the job from Jenkins server
 
 <p>This command accepts a boolean option <code>--force</code> which forces the destroy command to stop any running build. If this option is not specified the command will exit without destroying the job or the <code>stop</code> command can be called separately to stop the build before calling this command.</p>
 
-<h3>Structure of the configuration YAML file:</h3>
+<h3>
+<a name="structure-of-the-configuration-yaml-file" class="anchor" href="#structure-of-the-configuration-yaml-file"><span class="octicon octicon-link"></span></a>Structure of the configuration YAML file:</h3>
 
 <p>The structure of the configuration file looks like this.</p>
 
@@ -221,7 +234,8 @@ script:
  - sleep 5
 </code></pre>
 
-<h4>Configuration options:</h4>
+<h4>
+<a name="configuration-options" class="anchor" href="#configuration-options"><span class="octicon octicon-link"></span></a>Configuration options:</h4>
 
 <ul>
 <li>
@@ -236,11 +250,13 @@ script:
 <code>ref</code>: This specifies the <code>branch</code> to checkout for Git source control system.</li>
 <li>
 <code>script</code>: Shell command is the command executed on the server. Multiple lines of command can be given just like shown in the example.</li>
-</ul><h2>Author:</h2>
+</ul><h2>
+<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a>Author:</h2>
 
 <p>Kannan Manickam <a href="mailto:arangamani.kannan@gmail.com">arangamani.kannan@gmail.com</a></p>
 
-<h2>CONTRIBUTING:</h2>
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>CONTRIBUTING:</h2>
 
 <p>If you would like to contribute to this project, just do the following:</p>
 
@@ -251,7 +267,8 @@ script:
 <li>Review will be done and changes will be requested.</li>
 <li>Once changes are done or no changes are required, pull request will be merged.</li>
 <li>The next release will have your changes in it.</li>
-</ol><h2>LICENCE:</h2>
+</ol><h2>
+<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a>LICENCE:</h2>
 
 <p>Copyright (c) 2013 Kannan Manickam <a href="mailto:arangamani.kannan@gmail.com">arangamani.kannan@gmail.com</a></p>
 
@@ -276,10 +293,20 @@ THE SOFTWARE.</p>
 
         <footer>
           Jenkins Launcher is maintained by <a href="https://github.com/arangamani">arangamani</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-        
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-37519629-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
       </div>
     </div>
   </body>
